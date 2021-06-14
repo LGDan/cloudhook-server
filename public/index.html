@@ -1,59 +1,85 @@
 <!DOCTYPE html>
 <html>
-  <head>
+<head>
     <meta charset="utf-8" />
     <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    name="viewport"
+    content="width=device-width, initial-scale=1, shrink-to-fit=no"
     />
     <title>Cloudhook</title>
     <!-- Bootstrap CSS -->
     <link
-      rel="stylesheet"
-      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
-      integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk"
-      crossorigin="anonymous"
+    rel="stylesheet"
+    href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+    integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk"
+    crossorigin="anonymous"
     />
-
+    
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, 
-    then Bootstrap JS -->
-    <script
-      src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
-      integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
-      crossorigin="anonymous"
-    ></script>
-
-    <script
-      src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
-      integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
-      crossorigin="anonymous"
-    ></script>
-
-    <script
-      src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
-      integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
-      crossorigin="anonymous"
-    ></script>
-
-    <script src="js/bootstrap-select.js"></script>
-
-    <link rel="stylesheet" href="css/chat.css" />
-  </head>
-  <body>
-
-    <h1>Cloudhook Demo UI</h1>
-    <p>
-        <pre>
-            POST /hook/whateveryouwant/whateverhookyouwant
-        </pre>
-    </p>
-    <ul id="messages"></ul>
-    <form id="form" action="">
-      <input id="input" autocomplete="off" /><button>Send</button>
-    </form>
-
-    <script src="/socket.io/socket.io.js"></script>
-    <script src="js/chat.js"></script>
-  </body>
+        then Bootstrap JS -->
+        <script
+        src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"
+        ></script>
+        
+        <script
+        src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"
+        ></script>
+        
+        <script
+        src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+        integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+        crossorigin="anonymous"
+        ></script>
+        
+        <link rel="stylesheet" href="css/chat.css" />
+    </head>
+    <body>
+        <div class="container">
+            <h1 style="text-align: center;">Cloudhook</h1>
+            <p>Cloudhook is a service that enables webhook messages to be received behind firewalls or through proxies.</p>
+            <ol>
+                <li>Run the Cloudhook client i.e.
+                    <code class="p-1 mb-1 bg-dark text-light">
+                        cloudhook yourname/yourhook | jq | myscript.sh
+                    </code>
+                    and pipe the output in to whatever script or application you want.</li>
+                    <li>Point a webhook at /hook/yourname/yourhook</li>
+                    <li>Trigger the webhook.</li>
+                    <li>The body of the message will be printed on stdout, and in to whatever you're pipe is pointing at.</li>
+                </ol>
+                <p>
+                    My favourite is powershell.
+                    <br>
+                    <pre class="p-3 mb-2 bg-primary text-white">
+(cloudhook-client test/1) | % {
+    $object = $_ | ConvertFrom-Json
+    # Do Things!
+}</pre>
+                </p>
+                <p>
+                    Anyone who knows (or guesses) your webhook can send things to your listener!<br>
+                    I suggest picking something like:
+                    <pre>
+yourname-acfe5234afe26afe7465afe845afe09af0/myhook-a9e8c7fb68ae7f6bc9ae8f76cb9ae87</pre>
+                    or something similarly unguessable.
+                </p>
+                <p>
+                    This box below is linked to the <code>test/1</code> endpoint. Anything you <code>POST</code> there will appear.
+                </p>
+        </div>
+        <hr>
+        <ul id="messages"></ul>
+        <!--<form id="form" action="">
+            <input id="input" autocomplete="off" /><button>Send</button>
+        </form>-->
+        
+        <script src="/socket.io/socket.io.js"></script>
+        <script src="js/chat.js"></script>
+    </body>
 </html>
+        

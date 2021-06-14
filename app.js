@@ -3,8 +3,9 @@ const app = express();
 const http = require("http");
 const server = http.createServer(app);
 const { Server } = require("socket.io");
-const Redis = require("ioredis");
-const redisClient = new Redis();
+//TODO: Implement Redis for HA.
+//const Redis = require("ioredis");
+//const redisClient = new Redis();
 const io = new Server(server);
 
 
@@ -64,11 +65,6 @@ app.get("/hook/:tenant/:hookid", (req, res) => {
   res.status(200).send({"path": fullHook});
 });
 
-//app.get("/:id", (req, res) => {
-//  res.sendFile(__dirname + "/public/hats.html");
-//});
-
-
 // Socket.IO PubSub
 
 io.on("connection", (socket) => {
@@ -84,15 +80,5 @@ io.on("connection", (socket) => {
   socket.on("ch-unsubscribe", (msg) => {
     console.log("[Socket.IO] " + socket.handshake.address + " unsubscribed from " + msg);
     socket.leave(msg);
-  });
-
-  // Client publishing functionality currently disabled.
-  //socket.on("ch-publish", (msg) => {
-  //  console.log("user published " + msg.payload + " to " + msg.room);
-  //  io.to(msg.room).emit("ch-publish", msg.payload);
-  //});
-
-  socket.on("chat message", (msg) => {
-    io.emit("chat message", msg);
   });
 });

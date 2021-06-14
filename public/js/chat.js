@@ -1,16 +1,16 @@
 var socket = io();
 
 var messages = document.getElementById("messages");
-var form = document.getElementById("form");
-var input = document.getElementById("input");
+//var form = document.getElementById("form");
+//var input = document.getElementById("input");
 
-form.addEventListener("submit", function (e) {
-  e.preventDefault();
-  if (input.value) {
-    socket.emit("chat message", input.value);
-    input.value = "";
-  }
-});
+//form.addEventListener("submit", function (e) {
+//  e.preventDefault();
+//  if (input.value) {
+//    socket.emit("ch-post", input.value);
+//    input.value = "";
+//  }
+//});
 
 socket.emit("ch-subscribe","test/1");
 
