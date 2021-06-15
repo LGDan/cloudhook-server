@@ -1,6 +1,10 @@
 # Cloudhook
 
 Cloudhook is a service that enables webhook messages to be received behind firewalls or through proxies.
+It's horizontally scalable through the use of a redis cluster, I've got it up to 6k requests per second on a single desktop running the full stack. (4-Core i5-6600k)
+
+---
+
 
 1. Run the Cloudhook client i.e.
    `cloudhook yourname/yourhook | jq | myscript.sh` and pipe the output in to whatever script or application you want.

@@ -1,0 +1,107 @@
+version: '3.9'
+
+services:
+
+  cloudhook:
+    image: 'dang1t/cloudhook:latest'
+    ports:
+      - '3000:3000'
+    depends_on:
+      - redis-master-1
+    environment:
+      - REDIS_HOST=redis-master-1
+    networks:
+      - redisnet
+
+  redis-master-1:
+    image: 'bitnami/redis-cluster:latest'
+    ports:
+      - '6379:6379'
+    environment:
+      - REDIS_CLUSTER_CREATOR=yes
+      #- REDIS_PASSWORD=my_master_password
+      - ALLOW_EMPTY_PASSWORD=yes
+      - REDIS_NODES=redis-master-1 redis-master-2 redis-master-3 redis-replica-1 redis-replica-2 redis-replica-3
+    networks:
+      - redisnet
+  
+  redis-master-2:
+    image: 'bitnami/redis-cluster:latest'
+    ports:
+      - '6379'
+    environment:
+      - REDIS_CLUSTER_CREATOR=no
+      #- REDIS_PASSWORD=my_master_password
+      - ALLOW_EMPTY_PASSWORD=yes
+      - REDIS_NODES=redis-master-1 redis-master-2 redis-master-3 redis-replica-1 redis-replica-2 redis-replica-3
+    networks:
+      - redisnet
+
+  redis-master-3:
+    image: 'bitnami/redis-cluster:latest'
+    ports:
+      - '6379'
+    environment:
+      - REDIS_CLUSTER_CREATOR=no
+      #- REDIS_PASSWORD=my_master_password
+      - ALLOW_EMPTY_PASSWORD=yes
+      - REDIS_NODES=redis-master-1 redis-master-2 redis-master-3 redis-replica-1 redis-replica-2 redis-replica-3
+    networks:
+      - redisnet
+
+  redis-replica-1:
+    image: 'bitnami/redis-cluster:latest'
+    ports:
+      - '6379'
+    depends_on:
+      - redis-master-1
+    environment:
+      - REDIS_MASTER_PORT_NUMBER=6379
+      #- REDIS_MASTER_PASSWORD=my_master_password
+      #- REDIS_PASSWORD=my_replica_password
+      - ALLOW_EMPTY_PASSWORD=yes
+      - REDIS_NODES=redis-master-1 redis-master-2 redis-master-3 redis-replica-1 redis-replica-2 redis-replica-3
+    networks:
+      - redisnet
+
+  redis-replica-2:
+    image: 'bitnami/redis-cluster:latest'
+    ports:
+      - '6379'
+    depends_on:
+      - redis-master-1
+    environment:
+      - REDIS_MASTER_PORT_NUMBER=6379
+      #- REDIS_MASTER_PASSWORD=my_master_password
+      #- REDIS_PASSWORD=my_replica_password
+      - ALLOW_EMPTY_PASSWORD=yes
+      - REDIS_NODES=redis-master-1 redis-master-2 redis-master-3 redis-replica-1 redis-replica-2 redis-replica-3
+    networks:
+      - redisnet
+
+  redis-replica-3:
+    image: 'bitnami/redis-cluster:latest'
+    ports:
+      - '6379'
+    depends_on:
+      - redis-master-1
+    environment:
+      - REDIS_MASTER_PORT_NUMBER=6379
+      #- REDIS_MASTER_PASSWORD=my_master_password
+      #- REDIS_PASSWORD=my_replica_password
+      - ALLOW_EMPTY_PASSWORD=yes
+      - REDIS_NODES=redis-master-1 redis-master-2 redis-master-3 redis-replica-1 redis-replica-2 redis-replica-3
+    networks:
+      - redisnet
+
+  rebrow:
+    image: 'marian/rebrow:latest'
+    ports:
+      - '5001:5001'
+    depends_on:
+      - redis-master-1
+    networks:
+      - redisnet
+
+networks:
+  redisnet:
